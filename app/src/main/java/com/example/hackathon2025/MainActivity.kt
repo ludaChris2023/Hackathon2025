@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             Hackathon2025Theme {
                 // Start the app with the PhoneNumberInputScreen
-                PhoneNumberInputScreen()
+                FeedScreen()
             }
         }
     }
