@@ -31,6 +31,12 @@ fun PhoneNumberInputScreen() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Text(
+            text = "Please enter your phone number to get started",
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
         TextField(
             value = phoneNumber,
             onValueChange = { newValue ->
