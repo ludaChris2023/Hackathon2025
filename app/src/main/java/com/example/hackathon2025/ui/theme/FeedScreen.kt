@@ -3,8 +3,7 @@ package com.example.hackathon2025
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.border
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.* // Import all the filled icons
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,6 +24,7 @@ import coil.compose.AsyncImage
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 
@@ -61,7 +61,6 @@ fun SvgImage(url: String) {
     )
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedScreen() {
@@ -69,19 +68,19 @@ fun FeedScreen() {
         topBar = {
             TopAppBar(
                 title = {},
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF2D2D2D)),
                 actions = {
                     IconButton(
                         onClick = { /* Handle click */ },
-                        modifier = Modifier.padding(end = 24.dp) // move it more to the left
+                        modifier = Modifier.padding(end = 24.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Notifications,
                             contentDescription = "Notifications",
-                            modifier = Modifier.size(48.dp), // double the default 24.dp size
-                            tint = MaterialTheme.colorScheme.primary
+                            modifier = Modifier.size(48.dp),
+                            tint = Color(0xffe8c547)
                         )
                     }
-
                 }
             )
         },
@@ -101,19 +100,39 @@ fun FeedScreen() {
             }
         }
     ) { innerPadding ->
-    // Feed content box
+        // Feed content box with white background
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .background(Color (0xFF2D2D2D)),
+            contentAlignment = Alignment.Center
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth(0.85f)
+                    .padding(top = 32.dp, start = 8.dp, end = 8.dp, bottom = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp), // Space between items
+            ) {
+                items(5) { index -> // Creates 5 items (boxes)
+                    FeedItem(game) // Render the same box (team feed item)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun FeedItem(game: Game) {
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding),
-        contentAlignment = Alignment.Center
+            .fillMaxWidth()
+            .height(200.dp) // Set fixed height for each item
+            .background(Color.White)
+            .border(width = 2.dp, color = Color.Black)
+            .padding(top = 32.dp, start = 8.dp, end = 8.dp, bottom = 16.dp),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth(0.85f)
-                .fillMaxHeight(0.3f)
-                .border(width = 2.dp, color = Color.Black)
-                .padding(16.dp),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -131,14 +150,13 @@ fun FeedScreen() {
             // Bet button
             Button(
                 onClick = { /* Handle bet click */ },
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                modifier = Modifier.align(Alignment.CenterHorizontally).fillMaxWidth(0.4f),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xffe8c547))
             ) {
                 Text("Bet", fontSize = 20.sp)
             }
-
         }
     }
-}
 }
 
 @Composable
@@ -158,7 +176,7 @@ fun TeamColumn(name: String, odds: String, logoName: String) {
             modifier = Modifier.size(64.dp)
         )
         Text(name, fontSize = 18.sp)
-        Text(odds, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+        Text(odds, fontSize = 20.sp, fontWeight = FontWeight.Bold)
     }
 }
 
@@ -169,19 +187,28 @@ fun BottomNavItem(label: String) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
+        val icon = when (label) {
+            "My Bets" -> Icons.Default.Money // Relevant icon for "My Bets"
+            "Home" -> Icons.Default.Home // Relevant icon for "Home"
+            "My Stats" -> Icons.Default.BarChart // Relevant icon for "My Stats"
+            else -> Icons.Default.Place // Default icon
+        }
+
         Icon(
-            imageVector = Icons.Default.Place, // Placeholder icon
+            imageVector = icon,
             contentDescription = label,
-            tint = MaterialTheme.colorScheme.primary,
+            tint = Color(0xffe8c547),  // Set color to yellow
             modifier = Modifier.size(36.dp)
         )
         Text(
             text = label,
-            fontSize = 18.sp,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
         )
     }
 }
+
 
 @Composable
 fun PreferencesScreen(onNavigateToFeed: () -> Unit) { // Added a callback function
@@ -286,7 +313,7 @@ fun PreferencesScreen(onNavigateToFeed: () -> Unit) { // Added a callback functi
         OutlinedTextField(
             value = charityPaymentLink,
             onValueChange = { newValue ->
-                    charityPaymentLink = newValue
+                charityPaymentLink = newValue
             },
             label = { Text("Enter Charity Payment Link", color = Color.White) },
             keyboardOptions = KeyboardOptions.Default.copy(
