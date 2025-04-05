@@ -11,13 +11,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.hackathon2025.ui.theme.Hackathon2025Theme
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             Hackathon2025Theme {
-                // Start the app with the PhoneNumberInputScreen
-                StatsScreen()
+                // Track the screen name to decide which screen to show
+                var currentScreen by remember { mutableStateOf("PhoneNumberScreen") }
+
+                // Use 'when' to conditionally display the screen based on the currentScreen value
+                when (currentScreen) {
+                    "PhoneNumberScreen" -> PhoneNumberInputScreen { currentScreen = "OtpScreen" }
+                    "OtpScreen" -> OtpVerificationScreen { currentScreen = "PreferencesScreen" }
+                    "PreferencesScreen" -> PreferencesScreen()  // No need to change screen here
+                }
             }
         }
     }
