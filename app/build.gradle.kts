@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
 }
 
 android {
@@ -57,4 +59,23 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    implementation("io.coil-kt:coil-compose:2.4.0") // for loading images from URLs
+    implementation("io.coil-kt:coil-svg:2.4.0")
+
+// Ktor client dependencies
+    implementation("io.ktor:ktor-client-core:2.3.0") // Ktor client core
+    implementation("io.ktor:ktor-client-cio:2.3.0")  // For CIO engine
+    implementation("io.ktor:ktor-client-serialization:2.3.0") // For Ktor serialization
+    implementation("io.ktor:ktor-client-content-negotiation:2.3.0") // For content negotiation
+    implementation("io.ktor:ktor-client-request:2.3.0") // For making requests
+    implementation("io.ktor:ktor-client-statement:2.3.0") // For handling responses
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.0") // JSON serialization support
+    implementation("io.ktor:ktor-client-json:2.3.0") // JSON support (optional, if needed)
+
+// Coroutines dependencies
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0") // For coroutines
+
+
 }

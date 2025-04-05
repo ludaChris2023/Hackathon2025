@@ -16,8 +16,51 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.background
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import coil.ImageLoader
+import kotlinx.serialization.json.Json
+import coil.compose.AsyncImage
+import coil.decode.SvgDecoder
+import coil.request.ImageRequest
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+
+// Json Vars
+const val rawJson = """
+    [{"Team1":"New York Giants","Team2":"New York Jets","Spread":100,
+    "Team1Logo":"giants",
+    "Team2Logo":"jets",
+    "League":"NFL"}]
+"""
+
+val games = Json.decodeFromString<List<Game>>(rawJson)
+val game = games.first() // For now, just pick the first one
+
+//Image loader
+@Composable
+fun SvgImage(url: String) {
+    val context = LocalContext.current
+
+    val imageLoader = ImageLoader.Builder(context)
+        .components {
+            add(SvgDecoder.Factory())
+        }
+        .build()
+
+    AsyncImage(
+        model = ImageRequest.Builder(context)
+            .data(url)
+            .crossfade(true)
+            .build(),
+        imageLoader = imageLoader,
+        contentDescription = null,
+        modifier = Modifier.size(64.dp) // adjust as needed
+    )
+}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,23 +101,64 @@ fun FeedScreen() {
             }
         }
     ) { innerPadding ->
-        // Content of the Home Screen goes here
-        Box(
+    // Feed content box
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            contentAlignment = Alignment.Center
+                .fillMaxWidth(0.85f)
+                .fillMaxHeight(0.3f)
+                .border(width = 2.dp, color = Color.Black)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Box(
+            // Teams row
+            Row(
                 modifier = Modifier
-                    .fillMaxWidth(0.75f)
-                    .fillMaxHeight(0.3f)
-                    .border(width = 2.dp, color = Color.Black),
-                contentAlignment = Alignment.Center
+                    .fillMaxWidth()
+                    .padding(horizontal = 18.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Feed")
+                TeamColumn(name = game.Team1, odds = "+${game.Spread}", logoName = game.Team1Logo)
+                TeamColumn(name = game.Team2, odds = "-${game.Spread}", logoName = game.Team2Logo)
             }
+            // Bet button
+            Button(
+                onClick = { /* Handle bet click */ },
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text("Bet", fontSize = 20.sp)
+            }
+
         }
+    }
+}
+}
+
+@Composable
+fun TeamColumn(name: String, odds: String, logoName: String) {
+    val imageRes = when (logoName) {
+        "giants" -> R.drawable.giants_logo
+        "jets" -> R.drawable.jets_logo
+        else -> R.drawable.placeholder_logo // add a default placeholder
+    }
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(id = imageRes),
+            contentDescription = null,
+            modifier = Modifier.size(64.dp)
+        )
+        Text(name, fontSize = 18.sp)
+        Text(odds, fontSize = 18.sp, fontWeight = FontWeight.Bold)
     }
 }
 
