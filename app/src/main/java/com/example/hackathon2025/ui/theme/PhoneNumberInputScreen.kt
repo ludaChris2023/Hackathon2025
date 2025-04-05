@@ -1,76 +1,120 @@
 package com.example.hackathon2025
 
-import android.widget.Toast
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.border
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import java.util.regex.Pattern
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.foundation.background
 
 @Composable
 fun PhoneNumberInputScreen(onSwitchToOTPScreen: () -> Unit) {
     var phoneNumber by remember { mutableStateOf("") }
     var validationMessage by remember { mutableStateOf("") }
 
-    val phoneNumberRegex = Pattern.compile("^[0-9]{10}$")
+    val phoneNumberRegex = Regex("^[0-9]{10}$")
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(Color(0xFF2D2D2D)) // Charcoal background
+            .padding(16.dp)
     ) {
-
-        Text(
-            text = "Please enter your phone number to get started",
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-
-        TextField(
-            value = phoneNumber,
-            onValueChange = { newValue ->
-                if (newValue.all { it.isDigit() }) {
-                    phoneNumber = newValue
-                }
-                validationMessage = if (phoneNumberRegex.matcher(phoneNumber).matches()) {
-                    ""
-                } else {
-                    "Phone number must be 10 digits"
-                }
-            },
-            label = { Text("Enter Phone Number") },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done
-            ),
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .border(1.dp, MaterialTheme.colorScheme.primary)
-                .padding(16.dp)
-        )
-
-        if (validationMessage.isNotEmpty()) {
-            Text(
-                text = validationMessage,
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-        }
-
-        Button(
-            onClick = { onSwitchToOTPScreen() },
-            enabled = phoneNumberRegex.matcher(phoneNumber).matches(),
-            modifier = Modifier.padding(top = 16.dp)
+                .align(Alignment.Center)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Next")
+            // Title
+            Text(
+                text = "Win Win",
+                style = MaterialTheme.typography.headlineLarge.copy(color = Color.White),
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+
+            // Subtitle
+            Text(
+                text = "Conscious Free Gambling",
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    color = Color.White,
+                    fontStyle = FontStyle.Italic
+                ),
+                modifier = Modifier.padding(bottom = 20.dp)
+            )
+
+            // Instruction Text
+            Text(
+                text = "Please enter your phone number to get started",
+                style = MaterialTheme.typography.bodyLarge.copy(color = Color.White),
+                modifier = Modifier.padding(bottom = 20.dp)
+            )
+
+            // Phone Number Input
+            // Phone Number Input
+            OutlinedTextField(
+                value = phoneNumber,
+                onValueChange = { newValue ->
+                    if (newValue.all { it.isDigit() }) {
+                        phoneNumber = newValue
+                    }
+                    validationMessage = if (phoneNumber.matches(phoneNumberRegex)) {
+                        ""
+                    } else {
+                        "Phone number must be 10 digits"
+                    }
+                },
+                label = { Text("Enter Phone Number", color = Color.White) },
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Phone,
+                    imeAction = ImeAction.Done
+                ),
+                isError = validationMessage.isNotEmpty(),
+                modifier = Modifier.fillMaxWidth(),
+                textStyle = LocalTextStyle.current.copy(color = Color.White)
+                // You might still want to customize other colors if needed
+                // colors = TextFieldDefaults.outlinedTextFieldColors(
+                //     focusedBorderColor = Color.White,
+                //     unfocusedBorderColor = Color.Gray,
+                //     focusedLabelColor = Color.White,
+                //     unfocusedLabelColor = Color.Gray,
+                //     cursorColor = Color.White
+                // )
+            )
+
+            // Validation Message
+            if (validationMessage.isNotEmpty()) {
+                Text(
+                    text = validationMessage,
+                    style = MaterialTheme.typography.bodySmall.copy(color = Color.Red),
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
+
+            // Spacer
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // Next Button
+            Button(
+                onClick = { onSwitchToOTPScreen() },
+                enabled = phoneNumber.matches(phoneNumberRegex),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Next")
+            }
         }
     }
 }
+
 

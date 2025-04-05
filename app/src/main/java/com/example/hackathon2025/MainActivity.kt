@@ -24,7 +24,8 @@ class MainActivity : ComponentActivity() {
                 when (currentScreen) {
                     "PhoneNumberScreen" -> PhoneNumberInputScreen { currentScreen = "OtpScreen" }
                     "OtpScreen" -> OtpVerificationScreen { currentScreen = "PreferencesScreen" }
-                    "PreferencesScreen" -> PreferencesScreen()  // No need to change screen here
+                    "PreferencesScreen" -> PreferencesScreen() { currentScreen = "FeedScreen" } // Added callback
+                    "FeedScreen" -> FeedScreen()  // No need to change screen here
                 }
             }
         }
