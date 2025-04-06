@@ -14,7 +14,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-
+import androidx.compose.foundation.Image
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun OtpVerificationScreen(onSwitchToPreferencesScreen: () -> Unit) {
@@ -29,26 +35,68 @@ fun OtpVerificationScreen(onSwitchToPreferencesScreen: () -> Unit) {
             .background(Color(0xFF2D2D2D)) // Charcoal background
             .padding(16.dp)
     ) {
+
+
         Column(
             modifier = Modifier
                 .align(Alignment.Center)
-                .fillMaxWidth()
-                .padding(horizontal = 32.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        )
+        {
+            Box(
+                modifier = Modifier
+            ) {
+                // Title Image
+                Image(
+                    painter = painterResource(id = R.drawable.wwt), // replace with your image's resource ID
+                    contentDescription = "Header Image", // Description for accessibility
+                    modifier = Modifier
+                        .fillMaxWidth() // Make the image take up the full width of the screen
+                        .height(200.dp) // Increase the height for a larger image
+                        .align(Alignment.TopCenter) // Align the image at the top center
+                )
+
+
+
+            }
+
+            Spacer(modifier = Modifier.height(0.dp))
+
             // Title
             Text(
+
                 text = "OTP Verification",
-                style = MaterialTheme.typography.headlineLarge.copy(color = Color.White),
-                textAlign = TextAlign.Center
+                style = TextStyle(
+                    fontSize = 30.sp, // Larger font size
+                    fontWeight = FontWeight.Bold, // Bold font weight
+                    letterSpacing = 1.5.sp, // Adjust letter spacing
+                    lineHeight = 40.sp, // Adjust line height for better spacing
+                    color = Color(0xffe8c547), // We apply gradient color separately
+                ),
+                fontStyle = FontStyle.Italic // Italicize the text
+
+
             )
 
             // Instruction Text
+
+            Spacer(modifier = Modifier.height(50.dp))
+
             Text(
                 text = "Please enter the $otpLength-digit OTP",
-                style = MaterialTheme.typography.bodyLarge.copy(color = Color.White),
-                textAlign = TextAlign.Center
+                style = TextStyle(
+                    fontSize = 16.sp, // Slightly smaller font size
+                    fontWeight = FontWeight.Bold, // Bold font weight to match
+                    letterSpacing = 1.2.sp, // Adjust letter spacing to match
+                    lineHeight = 28.sp, // Adjust line height for better spacing
+                    color = Color(0xFF56CCF2), // White color to contrast with gradient header
+                    shadow = Shadow(
+                        color = Color.Black,
+                        blurRadius = 3f
+                    ) // Add shadow for consistency with the header text
+                ),
+                modifier = Modifier.padding(bottom = 20.dp)
             )
 
             // OTP Input Field
@@ -71,7 +119,7 @@ fun OtpVerificationScreen(onSwitchToPreferencesScreen: () -> Unit) {
                 ),
                 isError = validationMessage.isNotEmpty(),
                 modifier = Modifier.fillMaxWidth(),
-                textStyle = LocalTextStyle.current.copy(color = Color.White)
+                textStyle = LocalTextStyle.current.copy(Color(0xffe8c547))
                 // You might still want to customize other colors if needed
                 // colors = TextFieldDefaults.outlinedTextFieldColors(
                 //     textColor = Color.White,

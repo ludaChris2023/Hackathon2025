@@ -3,20 +3,33 @@ package com.example.hackathon2025
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.*
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.graphicsLayer
+
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.foundation.background
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.Shadow
 
 @Composable
 fun PhoneNumberInputScreen(onSwitchToOTPScreen: () -> Unit) {
@@ -36,28 +49,64 @@ fun PhoneNumberInputScreen(onSwitchToOTPScreen: () -> Unit) {
                 .align(Alignment.Center)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // Title
-            Text(
-                text = "Win Win",
-                style = MaterialTheme.typography.headlineLarge.copy(color = Color.White),
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
+        )
+
+
+
+        {
+
+            Box(
+                modifier = Modifier
+            ) {
+                // Title Image
+                Image(
+                    painter = painterResource(id = R.drawable.wwt), // replace with your image's resource ID
+                    contentDescription = "Header Image", // Description for accessibility
+                    modifier = Modifier
+                        .fillMaxWidth() // Make the image take up the full width of the screen
+                        .height(200.dp) // Increase the height for a larger image
+                        .align(Alignment.TopCenter) // Align the image at the top center
+                )
+
+
+
+            }
+
+
+            Spacer(modifier = Modifier.height(0.dp))
 
             // Subtitle
             Text(
+
                 text = "Conscious Free Gambling",
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    color = Color.White,
-                    fontStyle = FontStyle.Italic
+                style = TextStyle(
+                    fontSize = 30.sp, // Larger font size
+                    fontWeight = FontWeight.Bold, // Bold font weight
+                    letterSpacing = 1.5.sp, // Adjust letter spacing
+                    lineHeight = 40.sp, // Adjust line height for better spacing
+                    color = Color(0xffe8c547), // We apply gradient color separately
                 ),
-                modifier = Modifier.padding(bottom = 20.dp)
+                fontStyle = FontStyle.Italic // Italicize the text
+
+
             )
+
+            Spacer(modifier = Modifier.height(50.dp))
 
             // Instruction Text
             Text(
                 text = "Please enter your phone number to get started",
-                style = MaterialTheme.typography.bodyLarge.copy(color = Color.White),
+                style = TextStyle(
+                    fontSize = 16.sp, // Slightly smaller font size
+                    fontWeight = FontWeight.Bold, // Bold font weight to match
+                    letterSpacing = 1.2.sp, // Adjust letter spacing to match
+                    lineHeight = 28.sp, // Adjust line height for better spacing
+                    color = Color(0xFF56CCF2), // White color to contrast with gradient header
+                    shadow = Shadow(
+                        color = Color.Black,
+                        blurRadius = 3f
+                    ) // Add shadow for consistency with the header text
+                ),
                 modifier = Modifier.padding(bottom = 20.dp)
             )
 
@@ -82,7 +131,7 @@ fun PhoneNumberInputScreen(onSwitchToOTPScreen: () -> Unit) {
                 ),
                 isError = validationMessage.isNotEmpty(),
                 modifier = Modifier.fillMaxWidth(),
-                textStyle = LocalTextStyle.current.copy(color = Color.White)
+                textStyle = LocalTextStyle.current.copy(color = Color(0xffe8c547))
                 // You might still want to customize other colors if needed
                 // colors = TextFieldDefaults.outlinedTextFieldColors(
                 //     focusedBorderColor = Color.White,
@@ -116,5 +165,3 @@ fun PhoneNumberInputScreen(onSwitchToOTPScreen: () -> Unit) {
         }
     }
 }
-
-
