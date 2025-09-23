@@ -7,7 +7,7 @@ public class OTPGenerator {
         //Instantiate Random Number Generator
         Random random = new Random(System.currentTimeMillis());
 
-        //Add four random digits to the otp
+        //Generate OTP (Adding 4 random digits to otp)
         String otp = "";
         for(int i = 0; i < digits; i++) {
             otp += random.nextInt(10);
